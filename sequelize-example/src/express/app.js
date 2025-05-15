@@ -14,58 +14,26 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// We create a wrapper to workaround async errors not being transmitted correctly.
-function makeHandlerAwareOfAsyncErrors(handler) {
-	return async function(req, res, next) {
-		try {
-			await handler(req, res);
-		} catch (error) {
-			next(error);
-		}
-	};
-}
+// item routes
+app.get(`/api/items`, routes.items.getAll);
+app.get(`/api/items/:id`, routes.items.getById);
+app.post(`/api/items`, routes.items.create);
+app.put(`/api/items/:id`, routes.items.update);
+app.delete(`/api/items/:id`, routes.items.remove);
 
-// We define the standard REST APIs for each route (if they exist).
-for (const [routeName, routeController] of Object.entries(routes)) {
-	if (routeController.getAll) {
-		app.get(
-			`/api/${routeName}`,
-			makeHandlerAwareOfAsyncErrors(routeController.getAll)
-		);
-	}
-	if (routeController.getById) {
-		app.get(
-			`/api/${routeName}/:id`,
-			makeHandlerAwareOfAsyncErrors(routeController.getById)
-		);
-	}
-	if (routeController.create) {
-		app.post(
-			`/api/${routeName}`,
-			makeHandlerAwareOfAsyncErrors(routeController.create)
-		);
-	}
-	if (routeController.update) {
-		app.put(
-			`/api/${routeName}/:id`,
-			makeHandlerAwareOfAsyncErrors(routeController.update)
-		);
-	}
-	if (routeController.remove) {
-		app.delete(
-			`/api/${routeName}/:id`,
-			makeHandlerAwareOfAsyncErrors(routeController.remove)
-		);
-	}
-}
+// category routes
+app.get(`/api/categories`, routes.categories.getAll);
+app.get(`/api/categories/:id`, routes.categories.getById);
+app.post(`/api/categories`, routes.categories.create);
+app.put(`/api/categories/:id`, routes.categories.update);
+app.delete(`/api/categories/:id`, routes.categories.remove);
 
-app.get(`/api/orders/:id/items`,
-	makeHandlerAwareOfAsyncErrors(routes.orders.listItems)
-);
-
-app.post(`/api/orders/:id/items`,
-	makeHandlerAwareOfAsyncErrors(routes.orders.addItem)
-);
-
+// order routes
+app.get(`/api/orders`, routes.orders.getAll);
+app.get(`/api/orders/:id`, routes.orders.getById);
+app.post(`/api/orders`, routes.orders.create);
+app.put(`/api/orders/:id`, routes.orders.update);
+app.delete(`/api/orders/:id`, routes.orders.remove);
+app.get(`/api/orders/:id/items`, routes.orders.listItems);
 
 module.exports = app;

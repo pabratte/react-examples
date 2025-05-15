@@ -1,5 +1,4 @@
-const { Sequelize } = require('sequelize');
-const { applyExtraSetup } = require('./extra-setup');
+const { Sequelize, DataTypes } = require('sequelize');
 
 // In a real app, you should keep the database connection URL as an environment variable.
 // But for this example, we will just use a local SQLite database.
@@ -11,21 +10,46 @@ const sequelize = new Sequelize({
 	benchmark: true
 });
 
-const modelDefiners = [
-	require('./models/category.model'),
-	require('./models/item.model'),
-	require('./models/order.model'),
-	// Add more models here...
-	// require('./models/item'),
-];
+// define models
+sequelize.define('category', {
+	id: {
+		type: DataTypes.INTEGER,
+		primaryKey: true,
+		autoIncrement: true
+	},
+	name: {
+		type: DataTypes.STRING,
+		allowNull: false,
+	},
+});
 
-// We define all models according to their files.
-for (const modelDefiner of modelDefiners) {
-	modelDefiner(sequelize);
-}
+sequelize.define('item', {
+	id: {
+		type: DataTypes.INTEGER,
+		primaryKey: true,
+		autoIncrement: true
+	},
+	name: {
+		type: DataTypes.STRING,
+		allowNull: false, 
+	},
+});
 
-// We execute any extra setup after the models are defined, such as adding associations.
-applyExtraSetup(sequelize);
+sequelize.define('order', {
+	id: {
+		type: DataTypes.INTEGER,
+		primaryKey: true,
+		autoIncrement: true
+	},
+});
 
-// We export the sequelize connection instance to be used around our app.
+// define associations
+const { category, item, order } = sequelize.models;
+
+item.belongsTo(category);
+category.hasMany(item);
+item.belongsToMany(order, { through: 'order_item' });
+order.belongsToMany(item, { through: 'order_item' });
+
+// export the sequelize connection instance to be used around our app
 module.exports = sequelize;

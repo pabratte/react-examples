@@ -28,8 +28,13 @@ export function ShoppingList(props) {
     <div className='shopping-list'>
         <h1>Shopping List</h1>
         <form onSubmit={onFormSubmit}>
-            <ListItem label="manzanas" max={10} />
-            <ListItem label="peras" max={2} />
+            {items.map((item) => 
+                <ListItem
+                key={item.item}
+                label={item.item}
+                maxValue={item.max}
+              />
+            )}
             <button>Checkout</button>
         </form>
     </div>

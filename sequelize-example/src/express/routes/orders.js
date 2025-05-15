@@ -1,5 +1,4 @@
 const { models } = require('../../sequelize');
-const { getIdParam } = require('../helpers');
 
 async function getAll(req, res) {
 	const orders = await models.order.findAll();
@@ -7,7 +6,7 @@ async function getAll(req, res) {
 };
 
 async function getById(req, res) {
-	const id = getIdParam(req);
+	const id = req.params.id;
 	const order = await models.order.findByPk(id);
 	if (order) {
 		res.status(200).json(order);
@@ -26,7 +25,7 @@ async function create(req, res) {
 };
 
 async function update(req, res) {
-	const id = getIdParam(req);
+	const id = req.params.id;
 
 	// We only accept an UPDATE request if the `:id` param matches the body `id`
 	if (req.body.id === id) {
@@ -42,7 +41,7 @@ async function update(req, res) {
 };
 
 async function remove(req, res) {
-	const id = getIdParam(req);
+	const id = req.params.id;
 	await models.order.destroy({
 		where: {
 			id: id
@@ -52,7 +51,7 @@ async function remove(req, res) {
 };
 
 async function addItem(req, res) {
-	const orderId = getIdParam(req);
+	const id = req.params.id;
 	const order = await models.order.findByPk(orderId);
 	if (!order) {
 		res.status(404).send('404 - Not found');
@@ -73,7 +72,7 @@ async function addItem(req, res) {
 };
 
 async function listItems(req, res) {
-	const orderId = getIdParam(req);
+	const id = req.params.id;
 	const order = await models.order.findByPk(orderId, {
 		include: {
 			model: models.item,

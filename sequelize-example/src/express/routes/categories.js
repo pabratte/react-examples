@@ -1,5 +1,4 @@
 const { models } = require('../../sequelize');
-const { getIdParam } = require('../helpers');
 
 async function getAll(req, res) {
 	const categories = await models.category.findAll();
@@ -7,7 +6,7 @@ async function getAll(req, res) {
 };
 
 async function getById(req, res) {
-	const id = getIdParam(req);
+	const id = req.params.id;
 	const category = await models.category.findByPk(id);
 	if (category) {
 		res.status(200).json(category);
@@ -26,7 +25,7 @@ async function create(req, res) {
 };
 
 async function update(req, res) {
-	const id = getIdParam(req);
+	const id = req.params.id;
 
 	// We only accept an UPDATE request if the `:id` param matches the body `id`
 	if (req.body.id === id) {
@@ -42,7 +41,7 @@ async function update(req, res) {
 };
 
 async function remove(req, res) {
-	const id = getIdParam(req);
+	const id = req.params.id;
 	await models.category.destroy({
 		where: {
 			id: id
