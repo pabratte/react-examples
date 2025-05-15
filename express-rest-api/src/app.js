@@ -14,7 +14,7 @@ app.listen(PORT, (error) =>{
     }
 );
 
-app.get('/products', getAllProducts);
-app.post('/products', addProduct);
-app.put('/products/:productId', updateProduct);
-app.delete('/products/:productId', deleteProduct);
+app.get('/api/products', getAllProducts);
+app.post('/api/products', addProduct);
+app.put('/api/products/:productId', updateProduct);
+app.delete('/api/products/:productId', deleteProduct);

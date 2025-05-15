@@ -16,20 +16,20 @@ npm start
 
 List products
 ```
-curl localhost:3000/products
+curl localhost:3000/api/products
 ```
 
 Add new product
 ```
-curl -X POST localhost:3000/products -H "Content-Type: application/json" --data '{"name":"Product 1","price":30}'
+curl -X POST localhost:3000/api/products -H "Content-Type: application/json" --data '{"name":"Product 1","price":30}'
 ```
 
 Update product with id = 1
 ```
-curl -X PUT localhost:3000/products/1 -H "Content-Type: application/json" --data '{"name":"Updated Product 1","price":60}'
+curl -X PUT localhost:3000/api/products/1 -H "Content-Type: application/json" --data '{"name":"Updated Product 1","price":60}'
 ```
 
 Delete product with id = 1
 ```
-curl -X DELETE localhost:3000/products/1 
+curl -X DELETE localhost:3000/api/products/1 
 ```
